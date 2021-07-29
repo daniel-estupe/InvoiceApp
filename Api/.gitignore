@@ -24,6 +24,14 @@ Bin/
 obj/
 Obj/
 
+# IDE - VSCode
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
 # Visual Studio 2015 cache/options directory
 .vs/
 
