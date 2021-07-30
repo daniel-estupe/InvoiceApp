@@ -14,7 +14,5 @@ namespace Api.Models
         [Required]
         [StringLength(100, ErrorMessage = "El nombre del cliente no debe exceder de 100 caracteres.")]
         public string Name { get; set; }
-
-        public ICollection<Invoice> Invoices { get; set; }
     }
 }
