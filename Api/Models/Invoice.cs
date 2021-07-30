@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
@@ -21,5 +22,10 @@ namespace Api.Models
 
         public Customer Customer {get; set; }
         public ICollection<InvoiceDetail> Details { get; set; }
+
+        public Invoice()
+        {
+            Details = new Collection<InvoiceDetail>();
+        }
     }
 }

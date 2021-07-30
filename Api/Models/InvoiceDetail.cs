@@ -22,5 +22,16 @@ namespace Api.Models
 
         public Invoice Invoice { get; set; }
         public Product Product { get; set; }
+
+        public InvoiceDetail()
+        {
+        }
+
+        public InvoiceDetail(Product product, int amount)
+        {
+            this.Amount = amount;
+            this.Product = product;
+            this.Subtotal = product.UnitPrice * amount;
+        }
     }
 }

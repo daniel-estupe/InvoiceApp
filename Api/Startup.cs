@@ -13,6 +13,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 
 using Api.Data;
+using Api.Core;
+using Api.Repositories;
+using Api.Services;
 
 namespace Api
 {
@@ -28,6 +31,11 @@ namespace Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+            services.AddTransient<IInvoiceService, InvoiceService>();
+
+            services.AddSwaggerGen();
+
             services.AddDbContext<InvoiceContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("InvoiceDbConnection")));
 
@@ -41,6 +49,11 @@ namespace Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(opt => {
+                opt.SwaggerEndpoint("/swagger/v1/swagger.json", "Invoice API v1");
+            });
 
             app.UseHttpsRedirection();
 
