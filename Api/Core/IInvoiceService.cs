@@ -7,7 +7,8 @@ namespace Api.Core
 {
     public interface IInvoiceService
     {
+        Task<InvoiceResource> getById(int id);
          Task<ICollection<InvoiceSummaryResource>> getSummary();
-         Task<Invoice> create(NewInvoiceResource newInvoice);
+         Task<InvoiceSummaryResource> create(NewInvoiceResource newInvoice);
     }
 }

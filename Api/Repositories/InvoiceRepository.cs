@@ -42,6 +42,31 @@ namespace Api.Repositories
                 .ToListAsync();
         }
 
+        public async Task<InvoiceResource> getById(int id)
+        {
+            return await _context.Invoices
+                .Include(i => i.Customer)
+                .Include(i => i.Details)
+                    .ThenInclude(d => d.Product)
+                .Where(i => i.Id == id)
+                .Select(invoice => new InvoiceResource
+                {
+                    Id = invoice.Id,
+                    Correlative = invoice.Correlative,
+                    CreatedAt = invoice.CreatedAt,
+                    Customer = invoice.Customer,
+                    Details = invoice.Details
+                        .Select(detail => new InvoiceDetailResource
+                        {
+                            Id = detail.Id,
+                            Amount = detail.Amount,
+                            Subtotal = detail.Subtotal,
+                            Product = detail.Product
+                        })
+                })
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<int> getCurrentCorrelative()
         {
             var invoice = await _context.Invoices

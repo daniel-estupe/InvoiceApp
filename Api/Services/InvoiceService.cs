@@ -20,7 +20,7 @@ namespace Api.Services
             this.repository = repository;
         }
 
-        public async Task<Invoice> create(NewInvoiceResource newInvoice)
+        public async Task<InvoiceSummaryResource> create(NewInvoiceResource newInvoice)
         {
             var details = new Collection<InvoiceDetail>();
             foreach (var item in newInvoice.Detail)
@@ -38,7 +38,12 @@ namespace Api.Services
                 Details = details
             };
             await repository.create(invoice);
-            return invoice;
+            return await repository.getSummary(invoice.Id);
+        }
+
+        public async Task<InvoiceResource> getById(int id)
+        {
+            return await repository.getById(id);
         }
 
         public async Task<ICollection<InvoiceSummaryResource>> getSummary()

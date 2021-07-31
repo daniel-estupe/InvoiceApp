@@ -26,10 +26,20 @@ namespace Api.Controllers
             return await service.getSummary();
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Invoice>> Create(NewInvoiceResource newInvoice) 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<InvoiceResource>> GetById(int id) 
         {
-            return await service.create(newInvoice);
+            var invoice = await service.getById(id);
+            if (invoice == default) 
+                return NotFound();
+            return invoice;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<InvoiceSummaryResource>> Create(NewInvoiceResource newInvoice) 
+        {
+            var invoice = await service.create(newInvoice);
+            return CreatedAtAction("GetById", new {id = invoice.Id}, invoice);
         }
     }
 }

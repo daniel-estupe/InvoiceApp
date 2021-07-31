@@ -9,6 +9,7 @@ namespace Api.Core
     {
         Task create(Invoice invoice);
         Task<ICollection<InvoiceSummaryResource>> getAllSummarized();
+        Task<InvoiceResource> getById(int id);
         Task<int> getCurrentCorrelative();
         Task<InvoiceSummaryResource> getSummary(int invoiceId);
     }
