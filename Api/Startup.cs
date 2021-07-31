@@ -43,6 +43,12 @@ namespace Api
             services.AddControllers()
                 .AddNewtonsoftJson(opt => 
                     opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+            services.AddCors(opt => 
+            {
+                opt.AddPolicy("InvoiceApp",
+                    builder => builder.WithOrigins("*").WithHeaders("*").WithMethods("*"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +63,8 @@ namespace Api
             app.UseSwaggerUI(opt => {
                 opt.SwaggerEndpoint("/swagger/v1/swagger.json", "Invoice API v1");
             });
+
+            app.UseCors("InvoiceApp");
 
             app.UseHttpsRedirection();
 
