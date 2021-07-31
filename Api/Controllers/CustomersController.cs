@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 using Api.Models;
-using Api.Data;
+using Api.Core;
 
 namespace Api.Controllers
 {
@@ -12,17 +12,17 @@ namespace Api.Controllers
     [Route("api/customers")]
     public class CustomersController : ControllerBase
     {
-        private readonly InvoiceContext _context;
+        private readonly ICustomerRepository repository;
 
-        public CustomersController(InvoiceContext context)
+        public CustomersController(ICustomerRepository repository)
         {
-            _context = context;
+            this.repository = repository;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Customer>> Get()
+        public async Task<IEnumerable<Customer>> Get([FromQuery] string q)
         {
-            return await _context.Customers.ToListAsync();
+            return await repository.getAll(q);
         }
     }
 }
