@@ -1,0 +1,26 @@
+<main class="container mt-4">
+    <h2>Mi Factura</h2>
+        <mat-spinner class="mx-auto" *ngIf="loading"></mat-spinner>
+    <div class="invoice-container" *ngIf="!loading">
+        <div class="invoce-header">
+            <dl>
+                <dt>No.</dt>
+                <dd>{{ invoice?.correlative }}</dd>
+
+                <dt>Fecha</dt>
+                <dd>{{ invoice?.createdAt | date: "dd/MM/yyyy"  }}</dd>
+
+                <dt>Nit</dt>
+                <dd>{{ invoice?.customer?.billingNo }}</dd>
+
+                <dt>Cliente</dt>
+                <dd>{{ invoice?.customer?.name }}</dd>
+            </dl>
+            <button class="btn btn-danger mx-1 mt-2" (click)="onDelete()">Eliminar</button>
+            <button class="btn btn-secondary mx-1 mt-2">Editar</button>
+        </div>
+        <div class="invoice-detail">
+            <app-invoice-detail [detail]="invoice?.details!"></app-invoice-detail>
+        </div>
+    </div>
+</main>

@@ -1,0 +1,25 @@
+.mat-column-product {
+  flex: 0 0 40% !important;
+  width: 40% !important;
+}
+.mat-column-unitPrice {
+  flex: 0 0 18% !important;
+  width: 18% !important;
+}
+.mat-column-amount {
+  flex: 0 0 17% !important;
+  width: 17% !important;
+}
+.mat-column-subtotal {
+  flex: 0 0 25% !important;
+  width: 25% !important;
+}
+.mat-column-unitPrice.mat-cell, .mat-column-subtotal.mat-cell  {
+  text-align: end;
+} 
+.mat-column-amount.mat-cell {
+  text-align: center;
+}
+.mat-header-cell.mat-column-unitPrice, .mat-header-cell.mat-column-amount, .mat-header-cell.mat-column-subtotal {
+  text-align: center;
+}

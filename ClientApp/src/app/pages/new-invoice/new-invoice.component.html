@@ -1,0 +1,60 @@
+<main class="container">
+  <div class="main-header">
+    <h2>Nueva Factura</h2>
+    <button class="btn btn-success" (click)="onSaveInvoice()">Guardar</button>
+  </div>
+  <div class="invoice-container">
+    <div class="invoice-form">
+      <div class="invoice-form__header" [formGroup]="invoiceForm">
+        <mat-form-field appearance="fill" id="created-at">
+          <mat-label>Fecha</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="createdAt" autocomplete="off" />
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" id="customer">
+          <mat-label>Cliente</mat-label>
+          <input matInput placeholder="" formControlName="customer" autocomplete="off" (keyup.enter)="onSearchCustomer()" />
+        </mat-form-field>
+        <mat-icon id="customer-selected-icon" aria-hidden="false" class="text-success mt-4" aria-label="Cliente seleccionado" *ngIf="selectedCustomer">done</mat-icon>
+      </div>
+
+      <h3 class="invoice-detail-title">Detalle</h3>
+      <div class="invoice-form__detail" [formGroup]="invoiceDetailForm">
+        <mat-form-field appearance="fill" id="code">
+          <mat-label>Código de producto</mat-label>
+          <mat-select formControlName="productId" (selectionChange)="onSelectProduct()">
+            <mat-option *ngFor="let product of products" [value]="product.id" >
+              {{ product.code }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field id="description" appearance="fill">
+          <mat-label>Descripción</mat-label>
+          <input matInput placeholder="" autocomplete="off" formControlName="description"  />
+        </mat-form-field>
+
+        <mat-form-field id="amount" appearance="fill">
+          <mat-label>Cantidad</mat-label>
+          <input matInput type="number" placeholder="" autocomplete="off" formControlName="amount"  />
+        </mat-form-field>
+
+        <mat-form-field id="unit-price" appearance="fill">
+          <mat-label>Precio Unitario</mat-label>
+          <input matInput placeholder="" autocomplete="off" formControlName="unitPrice"  />
+        </mat-form-field>
+
+        <div class="subtotal-container mt-4">
+          <h4 class="subtotal-container__label">Subtotal</h4>
+          <div class="subtotal-container__price">{{ subtotal | currency: "Q" }}</div>
+        </div>
+        <button class="btn btn-primary mt-2" (click)="onAddDetail()">Agregar</button>
+      </div>
+    </div>
+    <div class="invoice-summary">
+      <app-invoice-detail [detail]="selectedDetail"></app-invoice-detail>
+    </div>
+  </div>
+</main>
