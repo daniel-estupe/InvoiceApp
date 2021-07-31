@@ -39,7 +39,9 @@ namespace Api
             services.AddDbContext<InvoiceContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("InvoiceDbConnection")));
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddNewtonsoftJson(opt => 
+                    opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
