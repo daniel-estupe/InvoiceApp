@@ -26,6 +26,15 @@ namespace Api.Repositories
             // return await getSummary(invoice.Id);
         }
 
+        public async Task<Invoice> deleteById(int id)
+        {
+            var invoice = await _context.Invoices.FindAsync(id);
+            if (invoice == null) return default;
+            _context.Invoices.Remove(invoice);
+            await _context.SaveChangesAsync();
+            return invoice;
+        }
+
         public async Task<ICollection<InvoiceSummaryResource>> getAllSummarized() {
             return await _context.Invoices
                 .Include(i => i.Details)
@@ -98,6 +107,12 @@ namespace Api.Repositories
                 })
                 .Where(invoice => invoice.Id == invoiceId)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<bool> invoiceExists(int id)
+        {
+            var invoice = await _context.Invoices.FindAsync(id);
+            return invoice != null;
         }
     }
 }

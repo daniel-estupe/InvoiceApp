@@ -41,5 +41,13 @@ namespace Api.Controllers
             var invoice = await service.create(newInvoice);
             return CreatedAtAction("GetById", new {id = invoice.Id}, invoice);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var invoice = await service.deleteById(id);
+            if (invoice == default) return NotFound();
+            return Ok();
+        }
     }
 }

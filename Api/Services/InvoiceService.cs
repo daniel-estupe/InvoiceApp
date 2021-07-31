@@ -50,5 +50,10 @@ namespace Api.Services
         {
             return await repository.getAllSummarized();
         }
+
+        public async Task<Invoice> deleteById(int id)
+        {
+            return await repository.deleteById(id);
+        }
     }
 }

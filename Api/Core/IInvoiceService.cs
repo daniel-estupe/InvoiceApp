@@ -10,5 +10,6 @@ namespace Api.Core
         Task<InvoiceResource> getById(int id);
          Task<ICollection<InvoiceSummaryResource>> getSummary();
          Task<InvoiceSummaryResource> create(NewInvoiceResource newInvoice);
+         Task<Invoice> deleteById(int id);
     }
 }
