@@ -6,6 +6,7 @@ using Api.Core;
 using Api.Data;
 using Api.Models;
 using Api.Resources;
+using System.Linq;
 
 namespace Api.Services
 {
@@ -20,7 +21,7 @@ namespace Api.Services
             this.repository = repository;
         }
 
-        public async Task<InvoiceSummaryResource> create(NewInvoiceResource newInvoice)
+        public async Task<InvoiceSummaryResource> create(AddInvoiceResource newInvoice)
         {
             var details = new Collection<InvoiceDetail>();
             foreach (var item in newInvoice.Detail)
@@ -54,6 +55,11 @@ namespace Api.Services
         public async Task<Invoice> deleteById(int id)
         {
             return await repository.deleteById(id);
+        }
+
+        public async Task<Invoice> update(int id, AddInvoiceResource invoice)
+        {
+            return await repository.update(id, invoice);
         }
     }
 }

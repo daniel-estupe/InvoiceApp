@@ -1,5 +1,6 @@
 using Api.Validators;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Api.Models
 {
@@ -16,6 +17,9 @@ namespace Api.Models
         [Required]
         [GreaterThanZero]
         public int Amount { get; set; }
+        
+        [NotMapped]
+        public float UnitPrice => (Subtotal==0) ? 0 : Subtotal / Amount;
 
         [Required]
         public float Subtotal { get; set; }

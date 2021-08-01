@@ -13,6 +13,10 @@ namespace Api.Core
         Task<ICollection<InvoiceSummaryResource>> getAllSummarized();
         Task<InvoiceResource> getById(int id);
         Task<int> getCurrentCorrelative();
+        Task<ICollection<InvoiceDetail>> getDetails(int id);
+        Task<Invoice> update(int id, AddInvoiceResource invoice);
+        // Task removeDetail(InvoiceDetail detail);
+        // Task updateDetail(InvoiceDetail detail);
         Task<InvoiceSummaryResource> getSummary(int invoiceId);
     }
 }

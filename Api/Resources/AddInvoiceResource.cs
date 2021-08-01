@@ -4,15 +4,15 @@ using System.Collections.Generic;
 
 namespace Api.Resources
 {
-    public class NewInvoiceResource
+    public class AddInvoiceResource
     {
         public DateTime CreatedAt { get; set; }
         public int CustomerId { get; set; }
-        public ICollection<NewInvoiceDetailResource> Detail { get; set; }
+        public ICollection<AddInvoiceDetailResource> Detail { get; set; }
 
-        public NewInvoiceResource()
+        public AddInvoiceResource()
         {
-            Detail = new Collection<NewInvoiceDetailResource>();
+            Detail = new Collection<AddInvoiceDetailResource>();
         }
     }
 }

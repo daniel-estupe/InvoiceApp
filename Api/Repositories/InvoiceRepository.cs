@@ -91,6 +91,13 @@ namespace Api.Repositories
             }
         }
 
+        public async Task<ICollection<InvoiceDetail>> getDetails(int id)
+        {
+            return await _context.InvoiceDetails
+                .Where(detail => detail.InvoiceId == id)
+                .ToListAsync();
+        }
+
         public async Task<InvoiceSummaryResource> getSummary(int invoiceId)
         {
             return await _context.Invoices
@@ -113,6 +120,49 @@ namespace Api.Repositories
         {
             var invoice = await _context.Invoices.FindAsync(id);
             return invoice != null;
+        }
+
+        public async Task<Invoice> update(int id, AddInvoiceResource invoiceEdited)
+        {
+            var invoice = await _context.Invoices.FindAsync(id);
+
+            if (invoice == null) return null;
+
+            invoice.CreatedAt = invoiceEdited.CreatedAt;
+            invoice.CustomerId = invoiceEdited.CustomerId;
+
+            var details = await getDetails(id);
+
+            // eliminar el detalle que no se encuentre la lista actualizada
+            foreach (var detail in details)
+            {
+                var detailSelected = invoiceEdited.Detail.Where(d => d.Id == detail.Id).FirstOrDefault();
+                if (detailSelected == default) {
+                    _context.InvoiceDetails.Remove(detail);
+                }
+            }
+
+            // actualizar los detalles que sí están en la lista
+            foreach (var detail in invoiceEdited.Detail)
+            {
+                var detailSelected = details.Where(d => d.Id == detail.Id).FirstOrDefault();
+                if (detailSelected != default) {
+                    detailSelected.Subtotal = detail.Amount * detailSelected.UnitPrice;
+                    detailSelected.Amount = detail.Amount;
+                }
+            }
+            
+            // agregar los nuevos detalles
+            foreach (var item in invoiceEdited.Detail)
+            {
+                if (item.Id == default) {
+                    var product = await _context.Products.FindAsync(item.ProductId);
+                    invoice.Details.Add(new InvoiceDetail(product, item.Amount));
+                }
+            }
+            
+            await _context.SaveChangesAsync();
+            return invoice;
         }
     }
 }

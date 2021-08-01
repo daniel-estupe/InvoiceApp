@@ -36,10 +36,18 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<InvoiceSummaryResource>> Create(NewInvoiceResource newInvoice) 
+        public async Task<ActionResult<InvoiceSummaryResource>> Create(AddInvoiceResource newInvoice) 
         {
             var invoice = await service.create(newInvoice);
             return CreatedAtAction("GetById", new {id = invoice.Id}, invoice);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Update(int id, AddInvoiceResource invoiceEdited) 
+        {
+            var invoice = await service.update(id, invoiceEdited);
+            if (invoice == null) return BadRequest();
+            return Ok();
         }
 
         [HttpDelete("{id}")]
