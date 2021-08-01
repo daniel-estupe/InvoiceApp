@@ -64,6 +64,10 @@
     <div class="invoice-summary">
       <app-invoice-detail [detail]="selectedDetail" [editable]="true" (onEdit)="onEditHandler($event)"
         (onDelete)="onDeleteHandler($event)"></app-invoice-detail>
+      <div class="total-container">
+        <h3 class="total-container__title">Total</h3>
+        <div>{{total | currency: 'Q'}}</div>
+      </div>
     </div>
   </div>
 </main>

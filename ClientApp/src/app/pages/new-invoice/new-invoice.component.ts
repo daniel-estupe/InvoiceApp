@@ -51,6 +51,10 @@ export class NewInvoiceComponent implements OnInit {
     return unitPrice * amount;
   }
 
+  get total() {
+    return this.selectedDetail.reduce((acc, curr) => acc + curr.subtotal, 0);
+  }
+
   onEditHandler(item: InvoiceDetail) {
     this.editEnabled = true;
     this.invoiceDetailToEdit = item;

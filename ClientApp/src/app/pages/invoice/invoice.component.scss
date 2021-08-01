@@ -2,3 +2,13 @@
     display: grid;
     grid-template-columns: 4fr 8fr;
 }
+.total-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+    font-weight: bold;
+    padding: 16px;
+    .total-container__title {
+      font-weight: inherit;
+    }
+  }

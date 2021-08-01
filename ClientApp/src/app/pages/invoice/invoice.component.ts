@@ -33,6 +33,10 @@ export class InvoiceComponent {
     })
   }
 
+  get total() {
+    return this.invoice?.details.reduce((acc, curr) => acc + curr.subtotal, 0);
+  }
+
   onDelete() {
     Swal.fire({
       title: 'Confirme para eliminar la factura',

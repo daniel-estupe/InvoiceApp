@@ -22,6 +22,10 @@
         </div>
         <div class="invoice-detail">
             <app-invoice-detail [detail]="invoice?.details!"></app-invoice-detail>
+            <div class="total-container">
+                <h3 class="total-container__title">Total</h3>
+                <div>{{total | currency: 'Q'}}</div>
+              </div>
         </div>
     </div>
 </main>
