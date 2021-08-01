@@ -1,10 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import Swal from 'sweetalert2';
+
 import { Customer } from 'src/app/core/models/customer.model';
 import { Invoice } from 'src/app/core/models/invoice.model';
 import { InvoiceDetail } from 'src/app/core/models/invoiceDetail.model';
+import { NewInvoice } from 'src/app/core/models/newInvoice.model';
+import { NewInvoiceDetail } from 'src/app/core/models/newInvoiceDetail.model';
 import { Product } from 'src/app/core/models/product.model';
+
 import { CustomerService } from 'src/app/core/services/customer.service';
 import { InvoiceService } from 'src/app/core/services/invoice.service';
 import { ProductService } from 'src/app/core/services/product.service';
@@ -23,6 +28,7 @@ export class EditInvoiceComponent implements OnInit {
   selectedProduct?: Product;
   selectedDetail: InvoiceDetail[] = [];
   invoiceDetailToEdit?: InvoiceDetail;
+  saveLoading = false;
   editEnabled = false;
 
   constructor(
@@ -30,7 +36,8 @@ export class EditInvoiceComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private customerService: CustomerService,
     private invoiceService: InvoiceService,
-    private productService: ProductService
+    private productService: ProductService,
+    private router: Router
   ) {
     this.invoiceForm = this.createInvoiceForm();
     this.invoiceDetailForm = this.createInvoiceDetailForm();
@@ -40,7 +47,7 @@ export class EditInvoiceComponent implements OnInit {
       this.invoice = res;
       this.invoiceForm.patchValue({
         createdAt: res.createdAt,
-        customer: `${res.customer.name} - ${res.customer.billingNo}`
+        customer: `${res.customer.name} - ${res.customer.billingNo}`,
       });
       this.selectedDetail = res.details;
       this.selectedCustomer = res.customer;
@@ -66,8 +73,8 @@ export class EditInvoiceComponent implements OnInit {
       productId: item.product?.id,
       description: item.product?.description,
       unitPrice: item.unitPrice,
-      amount: item.amount
-    })
+      amount: item.amount,
+    });
   }
 
   onDeleteHandler(item: InvoiceDetail) {
@@ -78,21 +85,42 @@ export class EditInvoiceComponent implements OnInit {
   }
 
   onSaveInvoice() {
-    // const createdAt: Date = this.invoiceForm.get('createdAt')?.value;
-    // const customerId: number = this.selectedCustomer?.id!;
-    // const newDetail: NewInvoiceDetail[] = this.selectedDetail
-    //   .map(({amount, product}: InvoiceDetail) => {
-    //     const detail: NewInvoiceDetail = {amount, productId: product?.id!};
-    //     return detail;
-    //   });
-    // const invoice: NewInvoice = {
-    //   createdAt,
-    //   customerId,
-    //   detail: newDetail
-    // }
-    // this.invoiceService.create(invoice).subscribe(() => {
-    //   this.router.navigate(['/']);
-    // })
+    if (!this.validateOnSave()) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'El formulario no es válido!',
+        confirmButtonColor: '#6c757d'
+      });
+      return;
+    }
+    const createdAt: Date = this.invoiceForm.get('createdAt')?.value;
+    const customerId: number = this.selectedCustomer?.id!;
+
+    const newDetail: NewInvoiceDetail[] = this.selectedDetail.map(
+      ({ id, amount, product }: InvoiceDetail) => {
+        const detail: NewInvoiceDetail = {
+          id,
+          amount,
+          productId: product?.id!,
+        };
+        return detail;
+      }
+    );
+    const invoice: NewInvoice = {
+      createdAt,
+      customerId,
+      detail: newDetail,
+    };
+
+    this.saveLoading = true;
+    this.invoiceService.update(this.invoice?.id!, invoice).subscribe(() => {
+      this.saveLoading = false;
+      Swal.fire('Hecho!', 'La factura se ha actualizado.', 'success');
+      this.router.navigate(['invoices', this.invoice?.id]);
+    }, () => {
+      this.saveLoading = false;
+    });
   }
 
   onSearchCustomer() {
@@ -156,6 +184,13 @@ export class EditInvoiceComponent implements OnInit {
     this.invoiceForm
       .get('customer')
       ?.setValue(`${customer.name} - ${customer.billingNo}`);
+  }
+
+  private validateOnSave(): boolean {
+    if (this.selectedDetail.length === 0) return false;
+    if (!this.selectedCustomer) return false;
+    if (this.invoiceForm.invalid) return false;
+    return true;
   }
 
   private validateDetail(): boolean {

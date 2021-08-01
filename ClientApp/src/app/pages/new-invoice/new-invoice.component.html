@@ -1,7 +1,8 @@
 <main class="container">
-  <div class="main-header">
+  <button class="btn btn-link" [routerLink]="['/']"><mat-icon>arrow_back</mat-icon> Regresar</button>
+  <div class="main-header mt-2">
     <h2>Nueva Factura</h2>
-    <button class="btn btn-success" (click)="onSaveInvoice()">Guardar</button>
+    <button class="btn btn-success" (click)="onSaveInvoice()" [disabled]="saveLoading">Guardar</button>
   </div>
   <div class="invoice-container">
     <div class="invoice-form">

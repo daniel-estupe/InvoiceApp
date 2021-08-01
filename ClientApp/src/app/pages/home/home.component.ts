@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { InvoiceSummary } from 'src/app/core/models/invoiceSummary.model';
 import { InvoiceService } from 'src/app/core/services/invoice.service';
@@ -8,6 +9,7 @@ import { InvoiceService } from 'src/app/core/services/invoice.service';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
+  loading = false;
   displayedColumns: string[] = [
     'correlative',
     'createdAt',
@@ -21,8 +23,12 @@ export class HomeComponent implements OnInit {
   constructor(private invoiceService: InvoiceService) {}
 
   ngOnInit() {
+    this.loading = true;
     this.invoiceService.getSummary().subscribe((res) => {
+      this.loading = false;
       this.dataSource = res;
+    }, () => {
+      this.loading = false;
     });
   }
 }

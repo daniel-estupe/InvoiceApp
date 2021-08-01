@@ -1,5 +1,6 @@
 <main class="container mt-4">
-    <h2>Mi Factura</h2>
+    <button class="btn btn-link" [routerLink]="['/']"><mat-icon>arrow_back</mat-icon> Regresar</button>
+    <h2 class="mt-4">Mi Factura</h2>
         <mat-spinner class="mx-auto" *ngIf="loading"></mat-spinner>
     <div class="invoice-container" *ngIf="!loading">
         <div class="invoce-header">

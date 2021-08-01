@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
+
 import { Customer } from 'src/app/core/models/customer.model';
 import { InvoiceDetail } from 'src/app/core/models/invoiceDetail.model';
 import { NewInvoice } from 'src/app/core/models/newInvoice.model';
 import { NewInvoiceDetail } from 'src/app/core/models/newInvoiceDetail.model';
 import { Product } from 'src/app/core/models/product.model';
+
 import { CustomerService } from 'src/app/core/services/customer.service';
 import { InvoiceService } from 'src/app/core/services/invoice.service';
 import { ProductService } from 'src/app/core/services/product.service';
@@ -24,7 +27,8 @@ export class NewInvoiceComponent implements OnInit {
   selectedDetail: InvoiceDetail[] = [];
   invoiceDetailToEdit?: InvoiceDetail;
   editEnabled = false;
-  
+  saveLoading = false;
+
   constructor(
     private formBuilder: FormBuilder,
     private productService: ProductService,
@@ -67,6 +71,16 @@ export class NewInvoiceComponent implements OnInit {
   }
 
   onSaveInvoice() {
+    if (!this.validateOnSave()) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'El formulario no es válido!',
+        confirmButtonColor: '#6c757d'
+      });
+      return;
+    }
+    
     const createdAt: Date = this.invoiceForm.get('createdAt')?.value;
     const customerId: number = this.selectedCustomer?.id!;
 
@@ -82,8 +96,13 @@ export class NewInvoiceComponent implements OnInit {
       detail: newDetail
     }
 
+    this.saveLoading = true;
     this.invoiceService.create(invoice).subscribe(() => {
+      this.saveLoading = false;
+      Swal.fire('Hecho!', 'Factura creada exitosamente.', 'success');
       this.router.navigate(['/']);
+    }, () => {
+      this.saveLoading = false;
     })
   }
 
@@ -135,6 +154,13 @@ export class NewInvoiceComponent implements OnInit {
         this.selectedCustomer = undefined;
       }
     });
+  }
+
+  private validateOnSave(): boolean {
+    if (this.selectedDetail.length === 0) return false;
+    if (!this.selectedCustomer) return false;
+    if (this.invoiceForm.invalid) return false;
+    return true;
   }
 
   private clearStateOnEdit() {

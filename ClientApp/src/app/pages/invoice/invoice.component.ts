@@ -23,6 +23,13 @@ export class InvoiceComponent {
       this.invoice = res;
     }, (error: HttpErrorResponse) => {
       this.loading = false;
+      Swal.fire({
+        icon: 'error',
+        text: 'No se encontró la factura indicada!',
+        confirmButtonColor: '#6c757d'
+      }).then(() => {
+        this.router.navigate(['/']);
+      })      
     })
   }
 
@@ -33,7 +40,7 @@ export class InvoiceComponent {
       showCancelButton: true,
       confirmButtonColor: '#dc3545',
       cancelButtonColor: '#6c757d',
-      confirmButtonText: 'Confirmo',
+      confirmButtonText: 'Confirmar',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {

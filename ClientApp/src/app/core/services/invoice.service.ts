@@ -27,4 +27,8 @@ export class InvoiceService {
   create(invoice: NewInvoice) {
     return this.http.post<InvoiceSummary>(`${environment.apiUrl}/invoices`, invoice);
   }
+
+  update(id: number, invoice: NewInvoice) {
+    return this.http.put(`${environment.apiUrl}/invoices/${id}`, invoice);
+  }
 }

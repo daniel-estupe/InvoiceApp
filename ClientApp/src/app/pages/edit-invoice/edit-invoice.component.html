@@ -1,7 +1,10 @@
 <main class="container">
   <div class="main-header">
     <h2>Editar Factura No. {{invoice?.correlative}}</h2>
-    <button class="btn btn-success" (click)="onSaveInvoice()">Guardar</button>
+    <div>
+      <button class="btn btn-secondary mx-1" [routerLink]="['/invoices', invoice?.id]">Cancelar</button>
+      <button class="btn btn-success" (click)="onSaveInvoice()" [disabled]="saveLoading">Guardar</button>
+    </div>
   </div>
   <div class="invoice-container">
     <div class="invoice-form">
