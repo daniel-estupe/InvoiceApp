@@ -11,6 +11,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { NewInvoiceComponent } from './pages/new-invoice/new-invoice.component';
 import { InvoiceComponent } from './pages/invoice/invoice.component';
 import { InvoiceDetailComponent } from './components/invoice-detail/invoice-detail.component';
+import { EditInvoiceComponent } from './pages/edit-invoice/edit-invoice.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { InvoiceDetailComponent } from './components/invoice-detail/invoice-deta
     NewInvoiceComponent,
     InvoiceComponent,
     InvoiceDetailComponent,
+    EditInvoiceComponent
   ],
   imports: [
     BrowserModule,

@@ -1,19 +1,19 @@
 <main class="container">
   <div class="main-header">
-    <h2>Nueva Factura</h2>
+    <h2>Editar Factura No. {{invoice?.correlative}}</h2>
     <button class="btn btn-success" (click)="onSaveInvoice()">Guardar</button>
   </div>
   <div class="invoice-container">
     <div class="invoice-form">
       <div class="invoice-form__header" [formGroup]="invoiceForm">
-        <mat-form-field appearance="fill" id="created-at">
+        <mat-form-field appearance="fill" class="created-at__input">
           <mat-label>Fecha</mat-label>
           <input matInput [matDatepicker]="picker" formControlName="createdAt" autocomplete="off" />
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
 
-        <mat-form-field appearance="fill" id="customer">
+        <mat-form-field appearance="fill" class="customer__input">
           <mat-label>Cliente</mat-label>
           <input matInput placeholder="" formControlName="customer" autocomplete="off"
             (keyup.enter)="onSearchCustomer()" />
@@ -24,7 +24,7 @@
 
       <h3 class="invoice-detail-title">Detalle</h3>
       <div class="invoice-form__detail" [formGroup]="invoiceDetailForm">
-        <mat-form-field appearance="fill" id="code">
+        <mat-form-field appearance="fill">
           <mat-label>Código de producto</mat-label>
           <mat-select formControlName="productId" (selectionChange)="onSelectProduct()">
             <mat-option *ngFor="let product of products" [value]="product.id">
@@ -33,19 +33,19 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field id="description" appearance="fill">
+        <mat-form-field appearance="fill">
           <mat-label>Descripción</mat-label>
-          <input matInput placeholder="" autocomplete="off" formControlName="description" />
+          <input matInput type="text" autocomplete="off" formControlName="description" />
         </mat-form-field>
 
-        <mat-form-field id="amount" appearance="fill">
+        <mat-form-field appearance="fill">
           <mat-label>Cantidad</mat-label>
-          <input matInput type="number" placeholder="" autocomplete="off" formControlName="amount" />
+          <input matInput type="number" autocomplete="off" formControlName="amount" />
         </mat-form-field>
 
-        <mat-form-field id="unit-price" appearance="fill">
+        <mat-form-field appearance="fill">
           <mat-label>Precio Unitario</mat-label>
-          <input matInput placeholder="" autocomplete="off" formControlName="unitPrice" />
+          <input matInput type="text" autocomplete="off" formControlName="unitPrice" />
         </mat-form-field>
 
         <div class="subtotal-container mt-4">
@@ -59,8 +59,8 @@
       </div>
     </div>
     <div class="invoice-summary">
-      <app-invoice-detail [detail]="selectedDetail" [editable]="true" (onDelete)="onDeleteHandler($event)"
-        (onEdit)="onEditHandler($event)"></app-invoice-detail>
+      <app-invoice-detail [detail]="selectedDetail" [editable]="true" (onEdit)="onEditHandler($event)"
+        (onDelete)="onDeleteHandler($event)"></app-invoice-detail>
     </div>
   </div>
 </main>

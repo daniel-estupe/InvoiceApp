@@ -1,21 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Customer } from 'src/app/core/models/customer.model';
+import { Invoice } from 'src/app/core/models/invoice.model';
 import { InvoiceDetail } from 'src/app/core/models/invoiceDetail.model';
-import { NewInvoice } from 'src/app/core/models/newInvoice.model';
-import { NewInvoiceDetail } from 'src/app/core/models/newInvoiceDetail.model';
 import { Product } from 'src/app/core/models/product.model';
 import { CustomerService } from 'src/app/core/services/customer.service';
 import { InvoiceService } from 'src/app/core/services/invoice.service';
 import { ProductService } from 'src/app/core/services/product.service';
 
 @Component({
-  selector: 'app-new-invoice',
-  templateUrl: './new-invoice.component.html',
-  styleUrls: ['./new-invoice.component.scss'],
+  selector: 'app-edit-invoice',
+  templateUrl: './edit-invoice.component.html',
+  styleUrls: ['./edit-invoice.component.scss'],
 })
-export class NewInvoiceComponent implements OnInit {
+export class EditInvoiceComponent implements OnInit {
+  invoice?: Invoice;
   products: Product[] = [];
   invoiceForm: FormGroup;
   invoiceDetailForm: FormGroup;
@@ -24,16 +24,27 @@ export class NewInvoiceComponent implements OnInit {
   selectedDetail: InvoiceDetail[] = [];
   invoiceDetailToEdit?: InvoiceDetail;
   editEnabled = false;
-  
+
   constructor(
     private formBuilder: FormBuilder,
-    private productService: ProductService,
+    private activatedRoute: ActivatedRoute,
     private customerService: CustomerService,
     private invoiceService: InvoiceService,
-    private router: Router
+    private productService: ProductService
   ) {
     this.invoiceForm = this.createInvoiceForm();
     this.invoiceDetailForm = this.createInvoiceDetailForm();
+
+    const id: string = this.activatedRoute.snapshot.params['id'];
+    this.invoiceService.getById(id).subscribe((res) => {
+      this.invoice = res;
+      this.invoiceForm.patchValue({
+        createdAt: res.createdAt,
+        customer: `${res.customer.name} - ${res.customer.billingNo}`
+      });
+      this.selectedDetail = res.details;
+      this.selectedCustomer = res.customer;
+    });
   }
 
   ngOnInit() {
@@ -67,24 +78,32 @@ export class NewInvoiceComponent implements OnInit {
   }
 
   onSaveInvoice() {
-    const createdAt: Date = this.invoiceForm.get('createdAt')?.value;
-    const customerId: number = this.selectedCustomer?.id!;
+    // const createdAt: Date = this.invoiceForm.get('createdAt')?.value;
+    // const customerId: number = this.selectedCustomer?.id!;
+    // const newDetail: NewInvoiceDetail[] = this.selectedDetail
+    //   .map(({amount, product}: InvoiceDetail) => {
+    //     const detail: NewInvoiceDetail = {amount, productId: product?.id!};
+    //     return detail;
+    //   });
+    // const invoice: NewInvoice = {
+    //   createdAt,
+    //   customerId,
+    //   detail: newDetail
+    // }
+    // this.invoiceService.create(invoice).subscribe(() => {
+    //   this.router.navigate(['/']);
+    // })
+  }
 
-    const newDetail: NewInvoiceDetail[] = this.selectedDetail
-      .map(({amount, product}: InvoiceDetail) => {
-        const detail: NewInvoiceDetail = {amount, productId: product?.id!};
-        return detail;
-      });
-
-    const invoice: NewInvoice = {
-      createdAt,
-      customerId,
-      detail: newDetail
-    }
-
-    this.invoiceService.create(invoice).subscribe(() => {
-      this.router.navigate(['/']);
-    })
+  onSearchCustomer() {
+    const { customer } = this.invoiceForm.value;
+    this.customerService.search(customer).subscribe((res) => {
+      if (res.length === 1) {
+        this.assignCustomer(res[0]);
+      } else {
+        this.selectedCustomer = undefined;
+      }
+    });
   }
 
   onAddDetail() {
@@ -123,17 +142,6 @@ export class NewInvoiceComponent implements OnInit {
     this.invoiceDetailForm.patchValue({
       description: this.selectedProduct?.description,
       unitPrice: this.selectedProduct?.unitPrice,
-    });
-  }
-
-  onSearchCustomer() {
-    const { customer } = this.invoiceForm.value;
-    this.customerService.search(customer).subscribe((res) => {
-      if (res.length === 1) {
-        this.assignCustomer(res[0]);
-      } else {
-        this.selectedCustomer = undefined;
-      }
     });
   }
 

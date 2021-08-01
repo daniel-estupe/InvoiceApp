@@ -14,6 +14,35 @@
   flex: 0 0 25% !important;
   width: 25% !important;
 }
+.mat-column-options {
+  flex: 0 0 0% !important;
+  width: 0% !important;
+}
+.editable {
+  .mat-column-product {
+    flex: 0 0 30% !important;
+    width: 30% !important;
+  }
+  .mat-column-unitPrice {
+    flex: 0 0 15% !important;
+    width: 15% !important;
+  }
+  .mat-column-amount {
+    flex: 0 0 17% !important;
+    width: 17% !important;
+  }
+  .mat-column-subtotal {
+    flex: 0 0 18% !important;
+    width: 18% !important;
+  }
+  .mat-column-options {
+    flex: 0 0 20% !important;
+    width: 20% !important;
+    text-align: center;
+    margin: 0 auto;
+  }
+}
+
 .mat-column-unitPrice.mat-cell, .mat-column-subtotal.mat-cell  {
   text-align: end;
 } 

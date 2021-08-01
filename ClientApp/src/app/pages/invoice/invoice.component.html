@@ -17,7 +17,7 @@
                 <dd>{{ invoice?.customer?.name }}</dd>
             </dl>
             <button class="btn btn-danger mx-1 mt-2" (click)="onDelete()">Eliminar</button>
-            <button class="btn btn-secondary mx-1 mt-2">Editar</button>
+            <button class="btn btn-secondary mx-1 mt-2" [routerLink]="['/invoices', invoice?.id, 'edit']">Editar</button>
         </div>
         <div class="invoice-detail">
             <app-invoice-detail [detail]="invoice?.details!"></app-invoice-detail>
